@@ -26,12 +26,12 @@ app.use(express.json());
 app.use(cors({
     origin: [
         "https://yash24032005.github.io", 
-        "https://food-delivery-frontend-delta-jet.vercel.app/" // apna vercel link bhi daal dena
+        "https://food-delivery-frontend-delta-jet.vercel.app", // Slash hata diya
+        "http://localhost:5173" // Local testing ke liye ye zaroori hai
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
-
 // Baki ka saara code same rahega
 const getToken = () => localStorage.getItem("token");
 
