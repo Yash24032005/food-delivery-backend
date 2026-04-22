@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cors({
     origin: [
         "https://yash24032005.github.io", 
-        "https://food-delivery-frontend-nine-tau.vercel.app" // apna vercel link bhi daal dena
+        "https://food-delivery-frontend-delta-jet.vercel.app/" // apna vercel link bhi daal dena
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
