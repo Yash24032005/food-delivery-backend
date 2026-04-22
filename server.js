@@ -16,12 +16,21 @@ import orderRouter from "./routes/orderRoute.js"
 
 //app config
 const app = express();
-const port = 4000
+// const port = 4000 ki jagah ye likho
+const port = process.env.PORT || 4000;
 
 
 //middleware
 app.use(express.json());
-app.use(cors());
+// purane app.use(cors()) ko hata kar ye likho
+app.use(cors({
+    origin: [
+        "https://yash24032005.github.io", 
+        "https://food-delivery-frontend-nine-tau.vercel.app" // apna vercel link bhi daal dena
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
 
 //db connection
 connectDB();
@@ -40,8 +49,11 @@ app.get('/', (req, res) => {
     res.send('API Working');
 })
 
+
+
 app.listen(port, () => {
-    console.log(`Server started on http://localhost:${port}`);
-})
+    console.log(`Server started on port ${port}`);
+});
+
 
 console.log("ENV CHECK:", process.env.MONGO_URI);
