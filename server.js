@@ -32,6 +32,9 @@ app.use(cors({
     credentials: true
 }));
 
+// Baki ka saara code same rahega
+const getToken = () => localStorage.getItem("token");
+
 //db connection
 connectDB();
 
