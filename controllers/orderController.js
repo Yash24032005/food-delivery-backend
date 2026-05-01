@@ -12,11 +12,60 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
+// // 🟢 PLACE ORDER
+// const placeOrder = async (req, res) => {
+//   try {
+//     const newOrder = new orderModel({
+//       userId: req.userId,
+//       items: req.body.items,
+//       amount: req.body.amount,
+//       address: req.body.address,
+//     });
+
+//     await newOrder.save();
+
+//     // Clear cart
+//     await userModel.findByIdAndUpdate(req.body.userId, {
+//       cartData: {},
+//     });
+
+//     // Razorpay order create
+//     const options = {
+//       amount: req.body.amount * 100, // ₹ → paise
+//       currency: "INR",
+//       receipt: "order_" + newOrder._id,
+//     };
+
+//     const order = await razorpay.orders.create(options);
+
+//     res.json({
+//       success: true,
+//       orderId: newOrder._id,
+//       razorpayOrderId: order.id,
+//       amount: order.amount,
+//       key: process.env.RAZORPAY_KEY_ID,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.json({ success: false, message: "Error placing order" });
+//   }
+// };
+
 // 🟢 PLACE ORDER
 const placeOrder = async (req, res) => {
   try {
+    // Middleware userId ko body mein add karta hai
+    const userId = req.body.userId; 
+
+    // const newOrder = new orderModel({
+    //   userId: userId,
+    //   items: req.body.items,
+    //   amount: req.body.amount,
+    //   address: req.body.address,
+    // });
+
     const newOrder = new orderModel({
-      userId: req.userId,
+      userId: req.body.userId, // <--- req.userId ko req.body.userId kar diya
       items: req.body.items,
       amount: req.body.amount,
       address: req.body.address,
@@ -24,12 +73,11 @@ const placeOrder = async (req, res) => {
 
     await newOrder.save();
 
-    // Clear cart
-    await userModel.findByIdAndUpdate(req.body.userId, {
+    // Clear cart (Hamesha userId check karein)
+    await userModel.findByIdAndUpdate(userId, {
       cartData: {},
     });
 
-    // Razorpay order create
     const options = {
       amount: req.body.amount * 100, // ₹ → paise
       currency: "INR",
@@ -46,7 +94,7 @@ const placeOrder = async (req, res) => {
       key: process.env.RAZORPAY_KEY_ID,
     });
   } catch (error) {
-    console.log(error);
+    console.log("Order Error:", error);
     res.json({ success: false, message: "Error placing order" });
   }
 };
